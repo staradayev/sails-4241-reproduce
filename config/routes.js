@@ -35,7 +35,7 @@ module.exports.routes = {
   '/': {
     view: 'homepage'
   },
-  '/ping': function(req, res) { return req.socket.emit('pong'); }
+  '/ping': function(req, res) { req.socket.emit('pong'); res.send(); }
 
   /***************************************************************************
   *                                                                          *
