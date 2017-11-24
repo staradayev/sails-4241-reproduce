@@ -92,8 +92,39 @@
     <!--SCRIPTS END-->
 
     <script type="text/javascript">
+      // Our stub room id
+      var roomId = 123
+
+      // Join the room 123
+      io.socket.post('/room/join', { roomId: roomId }, function (resData, jwRes) { console.log(resData) })
+
+      // Form submitting
+      function processForm(e) {
+          if (e.preventDefault) e.preventDefault()
+
+           // Send a message
+          io.socket.post('/message/public', { roomId: roomId, msg: document.getElementById('message').value }, function (resData, jwRes) { console.log(resData) })
+          
+          return false;
+      }
+
+      // Attach form submit event
+      var form = document.getElementById('my-form')
+      if (form.attachEvent) {
+          form.attachEvent("submit", processForm)
+      } else {
+          form.addEventListener("submit", processForm)
+      }
+
+      // Subscribe to the custom event listener
+      io.socket.on('message', function (data) { 
+        console.log(data) 
+        document.getElementById('chat').value = document.getElementById('chat').value + (new Date()).toString() + ': ' + data.msg + '\n';
+      })
+
+
       var i = 1;
-      setInterval(function(){io.socket.get('/ping', function(){});}, 1000);
+      setInterval(function(){io.socket.post('/ping', function(){});}, 1000);
       io.socket.on('pong', function(){document.getElementById('ping').value = 'pong ' + i++;});
       io.socket.on('disconnect', function(){
         document.getElementById('log').value = document.getElementById('log').value + 'disconnected! ' + (new Date()).toString() + '\n';

@@ -35,7 +35,17 @@ module.exports.routes = {
   '/': {
     view: 'homepage'
   },
-  '/ping': function(req, res) { req.socket.emit('pong'); res.send(); }
+  '/ping': function(req, res) { req.socket.emit('pong'); res.send(); },
+
+  'POST /room/join': {
+    action: 'join',
+    controller: 'RoomController'
+  },
+
+  'POST /message/public': {
+    action: 'public',
+    controller: 'MessageController'
+  }
 
   /***************************************************************************
   *                                                                          *
